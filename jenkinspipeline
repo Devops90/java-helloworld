@@ -1,0 +1,30 @@
+node{
+    def buildnumber= BUILD_NUMBER
+    stage('SCM Checkout'){
+        git changelog: false, poll: false, url: 'https://github.com/Devops90/java-helloworld.git'
+    }
+    stage(" Maven Clean Package"){
+        def mavenhome =  tool name: "maven3", type: "maven"
+        def mavenCMD = "${mavenhome}/bin/mvn"
+        sh "${mavenCMD} clean package"
+    } 
+    stage('Build Docker Image'){
+        sh "docker build -t hari90/java-helloworld:${buildnumber} ."
+    }
+    stage('Push Docker Image'){
+        withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) {
+            sh "docker login -u hari90 -p ${dockerhub}"
+        }
+        sh "docker push hari90/java-helloworld:${buildnumber}"
+    }
+    stage('Create docker swarm using cluster') {
+        def dockerimage= "sudo docker pull hari90/java-helloworld:${buildnumber}"
+        def dockerswarm= "sudo docker service create --name=webserver --replicas=2 hari90/java-helloworld:${buildnumber}"
+        sshagent(['dockerswarm']) {
+            sh"""
+            ssh -o StrictHostKeyChecking=no ubuntu@172.31.58.28 ${dockerimage}
+            ssh -o StrictHostKeyChecking=no ubuntu@172.31.58.28 ${dockerswarm}
+            """
+        }
+    }
+}
