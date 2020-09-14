@@ -11,6 +11,7 @@ RUN tar xvfz apache*.tar.gz
 RUN mv apache-tomcat-8.5.57/* /opt/tomcat/.
 RUN yum -y install java
 RUN java -version
+COPY /var/lib/jenkins/workspace/dockerswarm/target/*.war /opt/tomcat/webapps
 
 
 EXPOSE 8080
