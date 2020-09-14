@@ -9,7 +9,7 @@ RUN yum install wget -y
 RUN wget  https://downloads.apache.org/tomcat/tomcat-8/v8.5.57/bin/apache-tomcat-8.5.57.tar.gz
 RUN tar xvfz apache*.tar.gz
 RUN mv apache-tomcat-8.5.57/* /opt/tomcat/.
-COPY /var/lib/jenkins/workspace/dockerswarm/target/JavaHelloWorldApp.war /opt/tomcat/webapps/
+COPY /var/lib/jenkins/workspace/dockerswarm/target/JavaHelloWorldApp.war /opt/tomcat/webapps/JavaHelloWorldApp.war
 RUN yum -y install java
 RUN java -version
 
