@@ -6,9 +6,9 @@ RUN mkdir /opt/tomcat/
 
 WORKDIR /opt/tomcat
 RUN yum install wget -y
-RUN wget  https://downloads.apache.org/tomcat/tomcat-8/v8.5.57/bin/apache-tomcat-8.5.57.tar.gz
+RUN wget https://mirrors.estointernet.in/apache/tomcat/tomcat-9/v9.0.38/bin/apache-tomcat-9.0.38.tar.gz 
 RUN tar xvfz apache*.tar.gz
-RUN mv apache-tomcat-8.5.57/* /opt/tomcat/.
+RUN mv apache-tomcat-9.0.38/* /opt/tomcat/.
 COPY /var/lib/jenkins/workspace/dockerswarm/target/JavaHelloWorldApp.war /opt/tomcat/webapps/JavaHelloWorldApp.war
 RUN yum -y install java
 RUN java -version
